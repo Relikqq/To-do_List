@@ -3,10 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const calendarGrid = document.getElementById('calendarGrid');
     const headerCells = document.querySelectorAll('.calendar-grid .header-cell[data-day-idx]');
 
-    // Загрузка сохраненных задач
     let tasks = JSON.parse(localStorage.getItem('calendarTasks')) || [];
 
-    // Получение списка дней текущей недели (YYYY-MM-DD)
     function getCurrentWeekDays() {
         const now = new Date();
         const currentDay = now.getDay(); 
@@ -29,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const currentWeekDates = getCurrentWeekDays();
 
-    // Заполнение дат в шапке
     headerCells.forEach(cell => {
         const idx = parseInt(cell.dataset.dayIdx);
         const dateStr = currentWeekDates[idx];
@@ -37,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cell.innerHTML = `${cell.textContent}<br><span style="font-size: 11px; font-weight: normal;">${day}.${month}</span>`;
     });
 
-    // Определение состояний (Активная сейчас / Ближайшая из будущих)
     function getTaskStatuses() {
         const now = new Date();
         let closestTask = null;
@@ -47,11 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
         tasks.forEach(task => {
             if (task.status && task.status !== 'none') return;
 
-            // Парсим полные диапазоны дат со временем
             const startDateTime = new Date(`${task.startDate}T${task.startTime}`);
             const endDateTime = new Date(`${task.endDate}T${task.endTime}`);
             
-            // Если текущее время попадает внутрь интервала
             if (now >= startDateTime && now <= endDateTime) {
                 currentTaskId = task.id;
             }
@@ -69,13 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Хелпер форматирования даты для отображения внутри карточки (из YYYY-MM-DD в DD.MM)
     function formatMinDate(dateStr) {
         const [year, month, day] = dateStr.split('-');
         return `${day}.${month}`;
     }
 
-    // Отрисовка сетки
     function renderCalendar() {
         for (let i = 0; i < 7; i++) {
             document.getElementById(`col-${i}`).innerHTML = '';
@@ -86,12 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWeekDates.forEach((dateOfColumn, colIdx) => {
             const columnElem = document.getElementById(`col-${colIdx}`);
 
-            // 1. Фильтруем задачи: день колонки должен лежать в интервале [startDate, endDate]
             const dayTasks = tasks.filter(task => {
                 return dateOfColumn >= task.startDate && dateOfColumn <= task.endDate;
             });
 
-            // 2. Сортируем задачи: если задача началась в предыдущие дни, для этой колонки её старт равен "00:00"
             dayTasks.sort((a, b) => {
                 const aTime = a.startDate === dateOfColumn ? a.startTime : '00:00';
                 const bTime = b.startDate === dateOfColumn ? b.startTime : '00:00';
@@ -117,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                // Корректируем вывод времени: если задача многодневная, пишем даты, чтобы было понятно
                 let timeDisplay = `${task.startTime} - ${task.endTime}`;
                 if (task.startDate !== task.endDate) {
                     timeDisplay = `${formatMinDate(task.startDate)} ${task.startTime} → ${formatMinDate(task.endDate)} ${task.endTime}`;
@@ -142,7 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Создание новой задачи с валидацией сквозного времени
     taskForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -152,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const startTime = document.getElementById('startTime').value;
         const endTime = document.getElementById('endTime').value;
 
-        // Создаем полноценные объекты дат для точной валидации
         const startDateTime = new Date(`${startDate}T${startTime}`);
         const endDateTime = new Date(`${endDate}T${endTime}`);
 
@@ -178,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
         taskForm.reset();
     });
 
-    // Обработчик удаления
     calendarGrid.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete-btn')) {
             const taskId = parseInt(e.target.dataset.id);
@@ -188,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Обработчик смены статусов
     calendarGrid.addEventListener('change', (e) => {
         if (e.target.classList.contains('status-select')) {
             const taskId = parseInt(e.target.dataset.id);
