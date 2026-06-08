@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Недельный To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="calendar-section">
+            <div class="calendar-header">Задачи на текущую неделю</div>
+            <div class="calendar-grid" id="calendarGrid">
+                <div class="cell header-cell" data-day-idx="0">Пн</div>
+                <div class="cell header-cell" data-day-idx="1">Вт</div>
+                <div class="cell header-cell" data-day-idx="2">Ср</div>
+                <div class="cell header-cell" data-day-idx="3">Чт</div>
+                <div class="cell header-cell" data-day-idx="4">Пт</div>
+                <div class="cell header-cell" data-day-idx="5">Сб</div>
+                <div class="cell header-cell" data-day-idx="6">Вс</div>
+
+                <div class="day-column" id="col-0"></div>
+                <div class="day-column" id="col-1"></div>
+                <div class="day-column" id="col-2"></div>
+                <div class="day-column" id="col-3"></div>
+                <div class="day-column" id="col-4"></div>
+                <div class="day-column" id="col-5"></div>
+                <div class="day-column" id="col-6"></div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <h3>Добавить задачу</h3>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="taskName">Название задачи:</label>
+                    <input type="text" id="taskName" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskDate">Дата:</label>
+                    <input type="date" id="taskDate" required>
+                </div>
+                <div class="form-group row-inputs">
+                    <div class="input-half">
+                        <label for="startTime">Начало:</label>
+                        <input type="time" id="startTime" required>
+                    </div>
+                    <div class="input-half">
+                        <label for="endTime">Конец:</label>
+                        <input type="time" id="endTime" required>
+                    </div>
+                </div>
+                <button type="submit">Добавить</button>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
